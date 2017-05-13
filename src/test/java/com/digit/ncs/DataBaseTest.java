@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -27,6 +28,7 @@ public class DataBaseTest {
 
 	@After
 	public void tearDown() throws Exception {
+
 	}
 
 	@Test
@@ -36,15 +38,23 @@ public class DataBaseTest {
 
 	@Test
 	public void bTestDBExists() throws SQLException {
-
+		
 		DataBaseDao.getInstance().createDatabase();
-		DataBaseDao.getInstance().selectUseDatabase();
+		System.out.println();
+		try {
+			DataBaseDao.getInstance().selectUseDatabase();
+			System.err.printf(Config.LOG_SPACE, "JUnit TEST: DATABASE", Config.DB_NAME, "EXIST");
+		} catch (SQLException e) {
+			System.err.printf(Config.LOG_SPACE, "JUnit TEST: DATABASE", Config.DB_NAME, "NOT EXIST");
+			throw new SQLException();
+		}
+
 		System.out.println();
 	}
 
 	@Test
-	public void cTestEmployeeTableExists() {
-
+	public void cTestEmployeeTableExists() throws SQLException {
+		System.out.println();
 		DataBaseDao.getInstance().setForeignKeyCheck(0);
 
 		TableDao dao = TableDao.getInstance();
@@ -52,56 +62,75 @@ public class DataBaseTest {
 
 		DataBaseDao.getInstance().setForeignKeyCheck(1);
 
+		// EmployeeTable
 		tableExist(Config.TABLE_NAME[2]);
+		System.err.println();
 	}
 
-
-
 	@Test
-	public void dTestDepartmentTableExists() {
-
+	public void dTestDepartmentTableExists() throws SQLException {
+		System.out.println();
 		TableDao dao = TableDao.getInstance();
 		dao.createTable(Config.CREATE_SQL[1]);
 
+		// DepartmentTable
 		tableExist(Config.TABLE_NAME[1]);
+		System.out.println();
 	}
 
 	@Test
-	public void eTestTitleTableExists() {
-
+	public void eTestTitleTableExists() throws SQLException {
+		System.out.println();
 		TableDao dao = TableDao.getInstance();
 		dao.createTable(Config.CREATE_SQL[0]);
 
+		// TitleTable
 		tableExist(Config.TABLE_NAME[0]);
+		System.out.println();
 	}
-	
-	private void tableExist(String tblName) {
+
+	private void tableExist(String tblName) throws SQLException {
 
 		String sql =
 
-				"SELECT 1 AS flag "
-						+ "FROM information_schema.tables "
-						+ "WHERE "
-						+ "TABLE_NAME = '"
+				"SELECT 1 AS flag FROM information_schema.tables "
+						+ "WHERE TABLE_NAME = '"
 						+ tblName
-						+ "' AND TABLE_SCHEMA = 'ncs_erp_jsh'";
+						+ "' AND TABLE_SCHEMA = '"
+						+ Config.DB_NAME
+						+ "'";
 
-		Connection con = DBCon.getConnection();
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
 		try {
+			Connection con = DBCon.getConnection();
 			pstmt = con.prepareStatement(sql);
-			ResultSet rs = pstmt.executeQuery();
+			rs = pstmt.executeQuery();
+
 			if (rs.next()) {
-				Assert.assertEquals(1, rs.getInt("flag"));
-				
-				System.out.println(
-						rs.getInt("flag") == 1 ? "TABLE " + tblName + " EXISTS" : "TABLE " + tblName + " NOT EXISTS");
-				System.out.println();
-			}
+
+				if (rs.getInt("flag") == 1) {
+
+					Assert.assertEquals(1, rs.getInt("flag"));
+					System.err.printf(Config.LOG_SPACE, "JUnit TEST: TABLE", tblName, "EXIST");
+
+				} else throw new SQLException();
+
+			} else throw new SQLException();
+
+		} catch (SQLSyntaxErrorException e) {
+			System.err.printf(Config.LOG_SPACE, "JUnit TEST: ERROR", "SQL For TABLE EXIST", sql);
+			throw new SQLSyntaxErrorException();
+
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.err.printf(Config.LOG_SPACE, "JUnit TEST: TABLE", tblName, "NOT EXIST");
+			throw new SQLException();
+
 		} finally {
+			JdbcUtil.close(rs);
 			JdbcUtil.close(pstmt);
+
 		}
 	}
 

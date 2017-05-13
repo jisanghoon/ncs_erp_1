@@ -25,10 +25,10 @@ public class DataBaseDao {
 			Connection con = DBCon.getConnection();
 			pstmt = con.prepareStatement("CREATE DATABASE " + Config.DB_NAME);
 			pstmt.execute();
-			System.out.printf("CREATE DATABASE(%s) Success! %n", Config.DB_NAME);
+			System.out.printf(Config.LOG_SPACE, "CREATE DATABASE", Config.DB_NAME, "Success!");
 		} catch (SQLException e) {
 			if (e.getErrorCode() == 1007) {
-				System.out.printf("DATABASE(%s) Exist! %n", Config.DB_NAME);
+				System.err.printf(Config.LOG_SPACE, "DATABASE", Config.DB_NAME, "EXIST!");
 				dropDatabase();
 				createDatabase();
 			}
@@ -43,9 +43,9 @@ public class DataBaseDao {
 			Connection con = DBCon.getConnection();
 			pstmt = con.prepareStatement("DROP DATABASE IF EXISTS " + Config.DB_NAME);
 			pstmt.execute();
-			System.out.printf("DROP DATABASE(%s) Success! %n", Config.DB_NAME);
+			System.out.printf(Config.LOG_SPACE, "DROP DATABASE", Config.DB_NAME, "Success!");
 		} catch (SQLException e) {
-			System.out.printf("DROP DATABASE(%s) Fail! %n", Config.DB_NAME);
+			System.err.printf(Config.LOG_SPACE, "DROP DATABASE", Config.DB_NAME, "Fail!");
 			e.printStackTrace();
 
 		} finally {
@@ -58,9 +58,9 @@ public class DataBaseDao {
 			Connection con = DBCon.getConnection();
 			pstmt = con.prepareStatement("USE " + Config.DB_NAME);
 			pstmt.execute();
-			System.out.printf("USE DATABASE(%s) Selected Success! %n", Config.DB_NAME);
+			System.out.printf(Config.LOG_SPACE, "USE DATABASE", Config.DB_NAME, "Selected Success!");
 		} catch (SQLException e) {
-			System.out.printf("USE DATABASE(%s) Selected Fail! %n", Config.DB_NAME);
+			System.err.printf(Config.LOG_SPACE, "USE DATABASE", Config.DB_NAME, "Selected Fail!");
 			e.printStackTrace();
 			throw new SQLException();
 		} finally {
@@ -74,8 +74,11 @@ public class DataBaseDao {
 			pstmt = con.prepareStatement("SET FOREIGN_KEY_CHECKS = ?");
 			pstmt.setInt(1, isCheck);
 			pstmt.execute();
-			System.out.printf("%s SET FOREIGN_KEY_CHECKS(%s) Success!%n", Config.DB_NAME, isCheck == 0 ? "False" : "True");
+			System.out.printf(Config.LOG_SPACE, Config.DB_NAME, "SET FOREIGN_KEY_CHECKS",
+					(isCheck == 0 ? "'False'" : "'True'") + "Success!");
 		} catch (SQLException e) {
+			System.err.printf(Config.LOG_SPACE, Config.DB_NAME, "SET FOREIGN_KEY_CHECKS",
+					(isCheck == 0 ? "'False'" : "'True'") + "Fail!");
 			e.printStackTrace();
 		} finally {
 			JdbcUtil.close(pstmt);
