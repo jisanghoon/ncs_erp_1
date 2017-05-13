@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -96,7 +97,11 @@ public class SettingUI extends JFrame implements ActionListener {
 			msg = "초기화 완료";
 		}
 
-		create.initSetting();
+		try {
+			create.initSetting();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 		JOptionPane.showMessageDialog(null, msg);
 	}
 

@@ -1,14 +1,24 @@
 package com.digit.ncs;
 
-import static org.junit.Assert.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
+import com.digit.ncs.setting.Config;
 import com.digit.ncs.setting.dao.DataBaseDao;
+import com.digit.ncs.setting.dao.TableDao;
 import com.digit.ncs.setting.jdbc.DBCon;
+import com.digit.ncs.setting.jdbc.JdbcUtil;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DataBaseTest {
 
 	@Before
@@ -19,35 +29,80 @@ public class DataBaseTest {
 	public void tearDown() throws Exception {
 	}
 
-
 	@Test
 	public void aTestDBConnection() {
-		//fail("Not yet implemented");
-		DBCon.getConnection();
+		Assert.assertNotNull(DBCon.getConnection());
 	}
 
 	@Test
-	public void bTestDBExists() {
-		//fail("Not yet implemented");
+	public void bTestDBExists() throws SQLException {
+
 		DataBaseDao.getInstance().createDatabase();
+		DataBaseDao.getInstance().selectUseDatabase();
+		System.out.println();
 	}
 
 	@Test
 	public void cTestEmployeeTableExists() {
-		//fail("Not yet implemented");
-		
+
+		DataBaseDao.getInstance().setForeignKeyCheck(0);
+
+		TableDao dao = TableDao.getInstance();
+		dao.createTable(Config.CREATE_SQL[2]);
+
+		DataBaseDao.getInstance().setForeignKeyCheck(1);
+
+		tableExist(Config.TABLE_NAME[2]);
 	}
+
+
 
 	@Test
 	public void dTestDepartmentTableExists() {
-		//fail("Not yet implemented");
-		
+
+		TableDao dao = TableDao.getInstance();
+		dao.createTable(Config.CREATE_SQL[1]);
+
+		tableExist(Config.TABLE_NAME[1]);
 	}
 
 	@Test
 	public void eTestTitleTableExists() {
-		//fail("Not yet implemented");
-		
+
+		TableDao dao = TableDao.getInstance();
+		dao.createTable(Config.CREATE_SQL[0]);
+
+		tableExist(Config.TABLE_NAME[0]);
+	}
+	
+	private void tableExist(String tblName) {
+
+		String sql =
+
+				"SELECT 1 AS flag "
+						+ "FROM information_schema.tables "
+						+ "WHERE "
+						+ "TABLE_NAME = '"
+						+ tblName
+						+ "' AND TABLE_SCHEMA = 'ncs_erp_jsh'";
+
+		Connection con = DBCon.getConnection();
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = con.prepareStatement(sql);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				Assert.assertEquals(1, rs.getInt("flag"));
+				
+				System.out.println(
+						rs.getInt("flag") == 1 ? "TABLE " + tblName + " EXISTS" : "TABLE " + tblName + " NOT EXISTS");
+				System.out.println();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			JdbcUtil.close(pstmt);
+		}
 	}
 
 }

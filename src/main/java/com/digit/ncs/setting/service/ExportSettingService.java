@@ -13,7 +13,7 @@ import com.digit.ncs.setting.jdbc.JdbcUtil;
 public class ExportSettingService extends ServiceSetting {
 
 	@Override
-	public void initSetting() {
+	public void initSetting() throws SQLException {
 		DataBaseDao dao = DataBaseDao.getInstance();
 		dao.selectUseDatabase();
 
@@ -39,14 +39,12 @@ public class ExportSettingService extends ServiceSetting {
 	}
 
 	public void executeExportData(String tablePath, String tableName) {
-		String sql =
-				String.format(
-						"select * into outfile '%s' "
-								+ "character set 'UTF8' "
-								+ "fields TERMINATED by ',' "
-								+ "LINES TERMINATED by '\n' from %s",
-						tablePath,
-						tableName);
+		String sql = String.format(
+				"select * into outfile '%s' "
+						+ "character set 'UTF8' "
+						+ "fields TERMINATED by ',' "
+						+ "LINES TERMINATED by '\n' from %s",
+				tablePath, tableName);
 
 		Statement stmt = null;
 		try {

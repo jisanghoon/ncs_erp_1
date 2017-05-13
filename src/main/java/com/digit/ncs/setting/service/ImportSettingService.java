@@ -12,7 +12,7 @@ import com.digit.ncs.setting.jdbc.JdbcUtil;
 public class ImportSettingService extends ServiceSetting {
 
 	@Override
-	public void initSetting() {
+	public void initSetting() throws SQLException {
 		DataBaseDao dao = DataBaseDao.getInstance();
 		dao.selectUseDatabase();
 
@@ -24,11 +24,8 @@ public class ImportSettingService extends ServiceSetting {
 	}
 
 	private void executeImportDate(String tablePath, String tableName) {
-		String sql =
-				String.format(
-						"LOAD DATA LOCAL INFILE '%s' INTO TABLE %s character set 'UTF8' fields TERMINATED by ','",
-						tablePath,
-						tableName);
+		String sql = String.format("LOAD DATA LOCAL INFILE '%s' INTO TABLE %s character set 'UTF8' fields TERMINATED by ','",
+				tablePath, tableName);
 		Statement stmt = null;
 		try {
 			Connection con = DBCon.getConnection();

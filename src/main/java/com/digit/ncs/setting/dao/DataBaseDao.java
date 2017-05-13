@@ -53,7 +53,7 @@ public class DataBaseDao {
 		}
 	}
 
-	public void selectUseDatabase() {
+	public void selectUseDatabase() throws SQLException {
 		try {
 			Connection con = DBCon.getConnection();
 			pstmt = con.prepareStatement("USE " + Config.DB_NAME);
@@ -62,6 +62,7 @@ public class DataBaseDao {
 		} catch (SQLException e) {
 			System.out.printf("USE DATABASE(%s) Selected Fail! %n", Config.DB_NAME);
 			e.printStackTrace();
+			throw new SQLException();
 		} finally {
 			JdbcUtil.close(pstmt);
 		}
@@ -73,10 +74,7 @@ public class DataBaseDao {
 			pstmt = con.prepareStatement("SET FOREIGN_KEY_CHECKS = ?");
 			pstmt.setInt(1, isCheck);
 			pstmt.execute();
-			System.out.printf(
-					"%s SET FOREIGN_KEY_CHECKS(%s) Success!%n",
-					Config.DB_NAME,
-					isCheck == 0 ? "False" : "True");
+			System.out.printf("%s SET FOREIGN_KEY_CHECKS(%s) Success!%n", Config.DB_NAME, isCheck == 0 ? "False" : "True");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
