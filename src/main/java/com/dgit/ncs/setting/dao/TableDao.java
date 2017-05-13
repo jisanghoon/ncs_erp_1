@@ -1,12 +1,12 @@
-package com.digit.ncs.setting.dao;
+package com.dgit.ncs.setting.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.digit.ncs.setting.Config;
-import com.digit.ncs.setting.jdbc.DBCon;
-import com.digit.ncs.setting.jdbc.JdbcUtil;
+import com.dgit.ncs.setting.Config;
+import com.dgit.ncs.setting.jdbc.DBCon;
+import com.dgit.ncs.setting.jdbc.JdbcUtil;
 
 public class TableDao {
 	private PreparedStatement pstmt;

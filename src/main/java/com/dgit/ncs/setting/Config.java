@@ -1,4 +1,4 @@
-package com.digit.ncs.setting;
+package com.dgit.ncs.setting;
 
 public class Config {
 	public static final String USER   = "root";
@@ -15,7 +15,7 @@ public class Config {
 	public static final String EXPORT_DIR = System.getProperty("user.dir")+ "\\BackupFiles\\";
 	public static final String IMPORT_DIR = System.getProperty("user.dir")+ "\\DataFiles\\";
 	public static final String MYSQL_EXPORT_PATH = "C:\\ProgramData\\MySQL\\MySQL Server 5.6\\Uploads\\";
-	public static final String LOG_SPACE="%-25s %-25s %s %n";
+	public static final String LOG_SPACE="%-30s %-20s %s %n";
 	
 	public static final String[] CREATE_SQL ={
 			

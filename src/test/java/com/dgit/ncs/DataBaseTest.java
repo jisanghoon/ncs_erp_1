@@ -1,4 +1,4 @@
-package com.digit.ncs;
+package com.dgit.ncs;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,11 +13,11 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import com.digit.ncs.setting.Config;
-import com.digit.ncs.setting.dao.DataBaseDao;
-import com.digit.ncs.setting.dao.TableDao;
-import com.digit.ncs.setting.jdbc.DBCon;
-import com.digit.ncs.setting.jdbc.JdbcUtil;
+import com.dgit.ncs.setting.Config;
+import com.dgit.ncs.setting.dao.DataBaseDao;
+import com.dgit.ncs.setting.dao.TableDao;
+import com.dgit.ncs.setting.jdbc.DBCon;
+import com.dgit.ncs.setting.jdbc.JdbcUtil;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DataBaseTest {
@@ -38,59 +38,56 @@ public class DataBaseTest {
 
 	@Test
 	public void bTestDBExists() throws SQLException {
-		
-		DataBaseDao.getInstance().createDatabase();
-		System.out.println();
+
+		DataBaseDao.getInstance().createDB();
 		try {
-			DataBaseDao.getInstance().selectUseDatabase();
-			System.err.printf(Config.LOG_SPACE, "JUnit TEST: DATABASE", Config.DB_NAME, "EXIST");
+			DataBaseDao.getInstance().useDB();
+			System.out.println("\nJUnit TEST:");
+			System.out.printf(Config.LOG_SPACE, "DATABASE", Config.DB_NAME, "EXIST");
 		} catch (SQLException e) {
-			System.err.printf(Config.LOG_SPACE, "JUnit TEST: DATABASE", Config.DB_NAME, "NOT EXIST");
+			System.err.printf(Config.LOG_SPACE, "DATABASE", Config.DB_NAME, "NOT EXIST");
 			throw new SQLException();
 		}
-
-		System.out.println();
+		System.out.println("---------------------------------------------------------------------");
 	}
 
 	@Test
 	public void cTestEmployeeTableExists() throws SQLException {
-		System.out.println();
-		DataBaseDao.getInstance().setForeignKeyCheck(0);
+
+		DataBaseDao.getInstance().setFKeyCheck(0);
 
 		TableDao dao = TableDao.getInstance();
 		dao.createTable(Config.CREATE_SQL[2]);
 
-		DataBaseDao.getInstance().setForeignKeyCheck(1);
+		DataBaseDao.getInstance().setFKeyCheck(1);
 
 		// EmployeeTable
 		tableExist(Config.TABLE_NAME[2]);
-		System.err.println();
+		System.out.println("---------------------------------------------------------------------");
 	}
 
 	@Test
 	public void dTestDepartmentTableExists() throws SQLException {
-		System.out.println();
 		TableDao dao = TableDao.getInstance();
 		dao.createTable(Config.CREATE_SQL[1]);
 
 		// DepartmentTable
 		tableExist(Config.TABLE_NAME[1]);
-		System.out.println();
+		System.out.println("---------------------------------------------------------------------");
 	}
 
 	@Test
 	public void eTestTitleTableExists() throws SQLException {
-		System.out.println();
 		TableDao dao = TableDao.getInstance();
 		dao.createTable(Config.CREATE_SQL[0]);
 
 		// TitleTable
 		tableExist(Config.TABLE_NAME[0]);
-		System.out.println();
+		System.out.println("---------------------------------------------------------------------");
 	}
 
 	private void tableExist(String tblName) throws SQLException {
-
+		System.out.println("\nJUnit TEST:");
 		String sql =
 
 				"SELECT 1 AS flag FROM information_schema.tables "
@@ -113,18 +110,18 @@ public class DataBaseTest {
 				if (rs.getInt("flag") == 1) {
 
 					Assert.assertEquals(1, rs.getInt("flag"));
-					System.err.printf(Config.LOG_SPACE, "JUnit TEST: TABLE", tblName, "EXIST");
+					System.out.printf(Config.LOG_SPACE, "TABLE", tblName, "EXIST");
 
 				} else throw new SQLException();
 
 			} else throw new SQLException();
 
 		} catch (SQLSyntaxErrorException e) {
-			System.err.printf(Config.LOG_SPACE, "JUnit TEST: ERROR", "SQL For TABLE EXIST", sql);
+			System.err.printf(Config.LOG_SPACE, "ERROR", "SQL For TABLE EXIST", sql);
 			throw new SQLSyntaxErrorException();
 
 		} catch (SQLException e) {
-			System.err.printf(Config.LOG_SPACE, "JUnit TEST: TABLE", tblName, "NOT EXIST");
+			System.err.printf(Config.LOG_SPACE, "TABLE", tblName, "NOT EXIST");
 			throw new SQLException();
 
 		} finally {

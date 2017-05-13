@@ -1,4 +1,4 @@
-package com.digit.ncs.setting.jdbc;
+package com.dgit.ncs.setting.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

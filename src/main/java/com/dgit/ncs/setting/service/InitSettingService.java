@@ -1,11 +1,11 @@
-package com.digit.ncs.setting.service;
+package com.dgit.ncs.setting.service;
 
 import java.sql.SQLException;
 
-import com.digit.ncs.setting.Config;
-import com.digit.ncs.setting.dao.DataBaseDao;
-import com.digit.ncs.setting.dao.TableDao;
-import com.digit.ncs.setting.dao.UserDao;
+import com.dgit.ncs.setting.Config;
+import com.dgit.ncs.setting.dao.DataBaseDao;
+import com.dgit.ncs.setting.dao.TableDao;
+import com.dgit.ncs.setting.dao.UserDao;
 
 public class InitSettingService extends ServiceSetting {
 
@@ -19,8 +19,8 @@ public class InitSettingService extends ServiceSetting {
 	private void createDataBase() throws SQLException {
 
 		DataBaseDao dao = DataBaseDao.getInstance();
-		dao.createDatabase();
-		dao.selectUseDatabase();
+		dao.createDB();
+		dao.useDB();
 	}
 
 	private void createTable() {

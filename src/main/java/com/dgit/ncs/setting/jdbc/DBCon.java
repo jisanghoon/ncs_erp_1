@@ -1,10 +1,10 @@
-package com.digit.ncs.setting.jdbc;
+package com.dgit.ncs.setting.jdbc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import com.digit.ncs.setting.Config;
+import com.dgit.ncs.setting.Config;
 
 public class DBCon {
 	private static DBCon instance = new DBCon();

@@ -1,12 +1,12 @@
-package com.digit.ncs.setting.dao;
+package com.dgit.ncs.setting.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.digit.ncs.setting.Config;
-import com.digit.ncs.setting.jdbc.DBCon;
-import com.digit.ncs.setting.jdbc.JdbcUtil;
+import com.dgit.ncs.setting.Config;
+import com.dgit.ncs.setting.jdbc.DBCon;
+import com.dgit.ncs.setting.jdbc.JdbcUtil;
 
 public class UserDao {
 	private static UserDao instance = new UserDao();
@@ -36,10 +36,9 @@ public class UserDao {
 			System.out.printf(Config.LOG_SPACE, "Create User", Config.PJT_USER, "Success!");
 		} catch (SQLException e) {
 			if (e.getErrorCode() == 1396) {
-				System.err.printf(Config.LOG_SPACE, "User", Config.PJT_USER, "EXIST!");
 				dropUser();
 				createUser();
-			} else System.err.printf(Config.LOG_SPACE, "Create User", Config.PJT_USER, "Fail!");
+			} else System.out.printf(Config.LOG_SPACE, "Create User", Config.PJT_USER, "Fail!");
 		} finally {
 			JdbcUtil.close(pstmt);
 		}
@@ -54,9 +53,9 @@ public class UserDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, Config.PJT_USER);
 			pstmt.executeUpdate();
-			System.out.printf(Config.LOG_SPACE, "Drop User", Config.PJT_USER, "Success!");
+			System.out.printf(Config.LOG_SPACE, "Drop User IF EXISTS", Config.PJT_USER, "Success!");
 		} catch (SQLException e) {
-			System.err.printf(Config.LOG_SPACE, "Drop User", Config.PJT_USER, "Fail!");
+			System.out.printf(Config.LOG_SPACE, "Drop User", Config.PJT_USER, "Fail!");
 
 		} finally {
 			JdbcUtil.close(pstmt);
@@ -77,7 +76,7 @@ public class UserDao {
 			pstmt.executeUpdate();
 			System.out.printf(Config.LOG_SPACE, "Grant User", Config.PJT_USER, "Success!");
 		} catch (SQLException e) {
-			System.err.printf(Config.LOG_SPACE, "Grant User", Config.PJT_USER, "Fail!");
+			System.out.printf(Config.LOG_SPACE, "Grant User", Config.PJT_USER, "Fail!");
 		} finally {
 			JdbcUtil.close(pstmt);
 		}
@@ -99,8 +98,8 @@ public class UserDao {
 			System.out.printf(Config.LOG_SPACE, "Create User", Config.PJT_USER, "Success!");
 			System.out.printf(Config.LOG_SPACE, "Grant User", Config.PJT_USER, "Success!");
 		} catch (SQLException e) {
-			System.err.printf(Config.LOG_SPACE, "Create User", Config.PJT_USER, "Fail!");
-			System.err.printf(Config.LOG_SPACE, "Grant User", Config.PJT_USER, "Fail!");
+			System.out.printf(Config.LOG_SPACE, "Create User", Config.PJT_USER, "Fail!");
+			System.out.printf(Config.LOG_SPACE, "Grant User", Config.PJT_USER, "Fail!");
 			e.printStackTrace();
 		} finally {
 			JdbcUtil.close(pstmt);

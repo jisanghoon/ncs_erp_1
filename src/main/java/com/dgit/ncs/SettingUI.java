@@ -1,4 +1,4 @@
-package com.digit.ncs;
+package com.dgit.ncs;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -15,10 +15,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import com.digit.ncs.setting.service.ExportSettingService;
-import com.digit.ncs.setting.service.ImportSettingService;
-import com.digit.ncs.setting.service.InitSettingService;
-import com.digit.ncs.setting.service.ServiceSetting;
+import com.dgit.ncs.setting.service.ExportSettingService;
+import com.dgit.ncs.setting.service.ImportSettingService;
+import com.dgit.ncs.setting.service.InitSettingService;
+import com.dgit.ncs.setting.service.ServiceSetting;
 
 @SuppressWarnings("serial")
 public class SettingUI extends JFrame implements ActionListener {
