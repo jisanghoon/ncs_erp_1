@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.file.Files;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -78,6 +79,8 @@ public class SettingUI extends JFrame implements ActionListener {
 
 		Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setLocation((windowSize.width - getSize().width) / 2, (windowSize.height - getSize().height) / 2);
+		
+		
 	}
 
 	public void actionPerformed(ActionEvent e) {

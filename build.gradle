@@ -2,26 +2,45 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'application'
 
+
+mainClassName = 'com.dgit.ncs.SettingUI'
 sourceCompatibility = 1.8
+version = '1.0'
+
 //인코딩 지정
 tasks.withType(JavaCompile) {
-options.encoding = 'UTF-8'
+	options.encoding = 'UTF-8'
 }
-version = '1.0'
+
 jar {
     manifest {
-        attributes 'Implementation-Title': 'ncs_erp_1',
-                   'Implementation-Version': version
+        attributes  'Implementation-Title': 'SettingUI',
+                    'Implementation-Version': version, 
+        			'Main-Class': mainClassName
     }
+    archiveName 'SettingUI.jar'
+    dependsOn configurations.runtime
+    from {
+        configurations.compile.collect {it.isDirectory()? it: zipTree(it)}
+    }
+}
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.10'
 }
 
 repositories {
     mavenCentral()
 }
 
+
 dependencies {
-    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.40'
+     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.42'
+	
+	// https://mvnrepository.com/artifact/org.mybatis/mybatis
+	compile group: 'org.mybatis', name: 'mybatis', version: '3.4.1'
 	
 	// https://mvnrepository.com/artifact/log4j/log4j
 	compile group: 'log4j', name: 'log4j', version: '1.2.17'
